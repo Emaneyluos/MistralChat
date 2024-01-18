@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}test{% endblock %}</title>
+    {% block stylesheets %}
+        {# Link to your main stylesheet #}
+        <link rel="stylesheet" href="{{ asset('app.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+    {% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+    
+
+    <main>
+    {% block body %}{% endblock %}
+    </main>
+
+    {% block additional_scripts %}
+    {# Additional scripts can be added by child templates #}
+    {% endblock %}
+</body>
+</html>

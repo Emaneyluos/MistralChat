@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bienvenue dans mon chat</h1>
+
+    <div>
+        <label for="messageText" >Tapez votre message:</label>
+        <textarea type="text" id="messageText" name="text"> Fais moi une page Html</textarea>
+
+        <select id="messageSize" name="size">
+            <option value="tiny">Minuscule</option>
+            <option value="small">Petit</option>
+            <option value="medium">Moyen</option>
+        </select>
+
+        <button type="button" id="inputButton">Envoyer</button>
+    </div>
+
+    <div id="response" style="margin-top: 20px;">
+        <!-- Espace pour la réponse -->
+    </div>
+
+    <!-- Incluez le script JavaScript permettant d'envoyer une demande AJAX lorsque le bouton "Envoyer" est cliqué -->
+{% endblock %}

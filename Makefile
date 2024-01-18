@@ -1,40 +1,8 @@
-# Makefile
+DOCKER = docker
 
-Here is a Makefile template. It provides some shortcuts for the most common tasks.
-To use it, create a new `Makefile` file at the root of your project. Copy/paste
-the content in the template section. To view all the available commands, run `make`.
-
-For example, in the [getting started section](/README.md#getting-started), the
-`docker compose` commands could be replaced by:
-
-1. Run `make build` to build fresh images
-2. Run `make up` (detached mode without logs)
-3. Run `make down` to stop the Docker containers
-
-Of course, this template is basic for now. But, as your application is growing,
-you will probably want to add some targets like running your tests as described
-in [the Symfony book](https://symfony.com/doc/current/the-fast-track/en/17-tests.html#automating-your-workflow-with-a-makefile).
-You can also find a more complete example in this [snippet](https://www.strangebuzz.com/en/snippets/the-perfect-makefile-for-symfony).
-
-If you want to run make from within the `php` container, in the [Dockerfile](/Dockerfile),
-add:
-
-```diff
-gettext \
-git \
-+make \
-```
-
-And rebuild the PHP image.
-
-> [!NOTE]  
-> If you are using Windows, you have to install [chocolatey.org](https://chocolatey.org/) or [Cygwin](http://cygwin.com) to use the `make` command. Check out this [StackOverflow question](https://stackoverflow.com/q/2532234/633864) for more explanations.
-
-## The template
-
-```Makefile
+DOCKER_EXEC = $(DOCKER) exec -it
 # Executables (local)
-DOCKER_COMP = docker compose
+DOCKER_COMP = $(DOCKER) compose
 
 # Docker containers
 PHP_CONT = $(DOCKER_COMP) exec php
@@ -46,7 +14,7 @@ SYMFONY  = $(PHP) bin/console
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        : help build up start down logs sh composer vendor sf cc test
+.PHONY        : help build up start down logs sh composer vendor sf cc
 
 ## —— 🎵 🐳 The Symfony Docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -67,13 +35,8 @@ down: ## Stop the docker hub
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
 
-sh: ## Connect to the FrankenPHP container
+sh: ## Connect to the PHP FPM container
 	@$(PHP_CONT) sh
-
-test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
-	@$(eval c ?=)
-	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
-
 
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
@@ -91,4 +54,8 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
-```
+
+## —— Database 💾 ———————————————————————————————————————————————————————————————
+db: ## Access to the CLI of the database
+	@$(DOCKER_EXEC) le-cahier-database-1 psql -U app -d app
+
