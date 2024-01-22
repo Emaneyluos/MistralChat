@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,6 +33,8 @@ class ChatController extends AbstractController
     #[Route('/sendMessage', name: 'my_chat_send_message')]
     public function sendMessageAction(Request $request)
 {
+    set_time_limit(300);
+
     // Récupération des données envoyées par la requête AJAX
     $content = $request->getContent();
     $data = json_decode($content, true);
